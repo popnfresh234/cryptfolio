@@ -5,7 +5,9 @@ import android.database.Cursor;
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.CoinMarketCapEntry;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Alexander on 1/8/2018.
@@ -73,5 +75,8 @@ public class Utils {
         return coinList;
     }
 
-
+    public static String getFormattedDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy HH:mm a");
+        return sdf.format(date);
+    }
 }

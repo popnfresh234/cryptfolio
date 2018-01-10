@@ -14,6 +14,9 @@ import com.dmtaiwan.alexander.cryptfolio.models.crypto_compare.Crypto;
 import com.dmtaiwan.alexander.cryptfolio.models.crypto_compare.Exchange;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Alexander on 1/8/2018.
@@ -337,7 +340,6 @@ public class CryptfolioDBHelper extends SQLiteOpenHelper {
             ArrayList<Crypto> cryptos = exchange.getCryptos();
             for (Crypto crypto : cryptos) {
                 String sanitizedName = crypto.getCoinName().replace("*", "");
-                Log.i("TEST", "symbol_" + sanitizedName);
                 if (cursor.getColumnIndex("symbol_" + sanitizedName) != -1) {
                     cv.put("symbol_" + sanitizedName, crypto.getPairs().toString());
                 }
@@ -367,5 +369,38 @@ public class CryptfolioDBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return exchangeNames;
+    }
+
+    public static ArrayList<String> createTradingPairs(String exchange, String symbol, Context context) {
+
+        String whereClause = CryptfolioDBContract.ExchangesEntry.COLUMN_EXCHANGE_NAME + "=?";
+        String[] whereArgs = {exchange};
+        CryptfolioDBHelper dbHelper = new CryptfolioDBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(CryptfolioDBContract.ExchangesEntry.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
+        cursor.moveToFirst();
+
+        //Fetch pairs
+        String name = "symbol_" + symbol;
+        String list = cursor.getString(cursor.getColumnIndex(name));
+        if (list != null) {
+            String sanitized = list.replace("[", "").replace("]", "").replace(" ", "");
+            ArrayList<String> pairs = new ArrayList<>(Arrays.asList(sanitized.split(",")));
+            ArrayList<String> completePairs = new ArrayList();
+            for (String currency : pairs) {
+                completePairs.add(symbol + "/" + currency);
+            }
+            //Sort currencies
+            Collections.sort(completePairs, new Comparator<String>() {
+                @Override
+                public int compare(String s, String t1) {
+                    return s.compareToIgnoreCase(t1);
+                }
+            });
+            cursor.close();
+            return completePairs;
+
+        }
+        return null;
     }
 }

@@ -101,7 +101,6 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:layout_marginTop="@dimen/text_view_top_padding"
         app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_timedate_label"
         android:id="@+id/edit_transaction_text_view_date"
         tools:text="Monday, 8 Jan 2018, 21:53"
@@ -110,11 +109,13 @@
         android:layout_height="wrap_content"/>
 
     <TextView
+
         app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_date"
         android:id="@+id/edit_transaction_text_view_add_transaction"
         android:gravity="center"
         android:background="@color/colorTextBuy"
         android:text="@string/button_add_transaction"
+        android:layout_marginTop="@dimen/text_view_top_padding"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
