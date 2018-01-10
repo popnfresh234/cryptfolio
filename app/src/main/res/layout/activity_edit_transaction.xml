@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/edit_transaction_text_view_coin_name"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_view_coin_name_text_size"
+        tools:text = "BTC"
+        android:paddingTop="@dimen/text_view_top_padding"
+        android:paddingBottom="@dimen/text_view_top_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/edit_transaction_text_view_buy"
+        style="@style/edit_transaction_buy_sell_buttons"
+        android:text="Buy"
+        android:background="@color/colorTextBuy"
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_coin_name"
+        app:layout_constraintEnd_toStartOf="@id/guideline50"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/edit_transaction_text_view_sell"
+        style="@style/edit_transaction_buy_sell_buttons"
+        android:text="Sell"
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_coin_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline50"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline50"
+        app:layout_constraintGuide_percent="0.5"
+        style="@style/guidlineVertical"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_buy"
+        android:id="@+id/text_view_exchange_label"
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:text="@string/text_view_exchange_label"
+        android:textSize="@dimen/text_view_label_text_size"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Spinner
+        app:layout_constraintTop_toBottomOf="@id/text_view_exchange_label"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Dark"
+        android:id="@+id/edit_transaction_spinner_exchanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_spinner_exchanges"
+        android:id="@+id/text_view_trading_pair_label"
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:text="@string/text_view_trading_pair_label"
+        android:textSize="@dimen/text_view_label_text_size"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Spinner
+        app:layout_constraintTop_toBottomOf="@id/text_view_trading_pair_label"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Dark"
+        android:id="@+id/edit_transaction_spinner_trading_pair"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_spinner_trading_pair"
+        android:id="@+id/edit_transaction_edit_text_price"
+        android:hint="@string/hint_buy_price"
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <EditText
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_edit_text_price"
+        android:id="@+id/edit_transaction_edit_text_amount"
+        android:hint="@string/hint_amount_bought"
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_edit_text_amount"
+
+        android:textSize="@dimen/text_view_label_text_size"
+        android:id="@+id/edit_transaction_text_view_timedate_label"
+        android:text="Time &amp; Date"
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_marginTop="@dimen/text_view_top_padding"
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_timedate_label"
+        android:id="@+id/edit_transaction_text_view_date"
+        tools:text="Monday, 8 Jan 2018, 21:53"
+        android:paddingLeft="@dimen/default_spinner_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/edit_transaction_text_view_date"
+        android:id="@+id/edit_transaction_text_view_add_transaction"
+        android:gravity="center"
+        android:background="@color/colorTextBuy"
+        android:text="@string/button_add_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+
+</android.support.constraint.ConstraintLayout>

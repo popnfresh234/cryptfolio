@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="edit_transaction_buy_sell_button_height">50dp</dimen>
+    <dimen name="dropdownListPreferredItemHeight">64dp</dimen>
+    <dimen name="default_spinner_padding">8dp</dimen>
+    <dimen name="text_view_top_padding">16dp</dimen>
+    <dimen name="text_view_label_text_size">12sp</dimen>
+    <dimen name="text_view_coin_name_text_size">30sp</dimen>
+</resources>
