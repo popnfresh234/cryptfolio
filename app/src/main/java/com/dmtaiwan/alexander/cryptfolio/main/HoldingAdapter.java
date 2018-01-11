@@ -1,6 +1,8 @@
 package com.dmtaiwan.alexander.cryptfolio.main;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dmtaiwan.alexander.cryptfolio.R;
+import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract;
+import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBHelper;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
 import com.dmtaiwan.alexander.cryptfolio.models.Holding;
+import com.dmtaiwan.alexander.cryptfolio.utilities.Utils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ public class HoldingAdapter extends RecyclerView.Adapter<HoldingAdapter.ViewHold
     private ArrayList<Holding> holdings;
     private ArrayList<Coin> coins;
     private Context context;
+    private String preferredCurrency = SettingsFragment.CAD;
 
     public HoldingAdapter(Context context) {
         this.context = context;
@@ -47,20 +53,46 @@ public class HoldingAdapter extends RecyclerView.Adapter<HoldingAdapter.ViewHold
 
         Holding holding = holdings.get(position);
         holder.currencyName.setText(holding.getCurrencyName());
-        holder.cryptoAmount.setText(holding.getAmount().toPlainString());
+
 
         String symbol = holding.getCurrencySymbol();
         if (coins != null) {
 
             for (Coin coin : coins) {
                 if (coin.getSymbol().equals(symbol)) {
-                    holder.fiatPrice.setText(coin.getPrice_cad());
-                    holder.percentChange.setText(coin.getPercent_change_twenty_four_hour());
+                    //Set basic info
+                    String formattedPrice = Utils.formatCurrency(coin.getPrice_cad(), preferredCurrency);
+                    holder.fiatPrice.setText(formattedPrice);
+                    holder.percentChange.setText(Utils.formatPercentage(coin.getPercent_change_twenty_four_hour()));
 
-                    //Calculate fiat change
-                    BigDecimal bigDecimalPercentage = new BigDecimal(coin.getPercent_change_twenty_four_hour());
-                    String fiatChange = bigDecimalPercentage.multiply(holding.getAmount()).toPlainString();
-                    holder.fiatChange.setText(fiatChange);
+                    //Set the amount of crypto held and add symbol
+                    holder.cryptoAmount.setText(holding.getAmount().toPlainString() + " " + coin.getSymbol());
+
+                    //Calculate cumulative profit
+                    BigDecimal cumulativeProfit = new BigDecimal(0);
+                    CryptfolioDBHelper dbHelper = new CryptfolioDBHelper(context);
+                    SQLiteDatabase db = dbHelper.getReadableDatabase();
+                    Cursor transactions = db.query(CryptfolioDBContract.TransactionEntry.TABLE_NAME,
+                            null, CryptfolioDBContract.TransactionEntry.COLUMN_SYMBOL + " = ?",
+                            new String[]{coin.getSymbol()},
+                            null,
+                            null,
+                            null);
+                    while (transactions.moveToNext()) {
+                        BigDecimal basisAmount = new BigDecimal(transactions.getString(transactions.getColumnIndex(CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_AMOUNT)));
+                        BigDecimal basisCost = new BigDecimal(transactions.getString(transactions.getColumnIndex(CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_PRICE)));
+                        BigDecimal costBasis = basisAmount.multiply(basisCost);
+
+                        BigDecimal currentPrice = new BigDecimal(coin.getPrice_cad());
+                        BigDecimal currentValue = basisAmount.multiply(currentPrice);
+
+                        BigDecimal profit = currentValue.subtract(costBasis);
+
+                        cumulativeProfit = cumulativeProfit.add(profit);
+                    }
+                    transactions.close();
+                    String formattedCumulativeProfit = Utils.formatCurrency(cumulativeProfit.toPlainString(), preferredCurrency);
+                    holder.fiatChange.setText(formattedCumulativeProfit);
                 }
             }
 

@@ -3,11 +3,15 @@ package com.dmtaiwan.alexander.cryptfolio.utilities;
 import android.database.Cursor;
 
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.CoinMarketCapEntry;
+import com.dmtaiwan.alexander.cryptfolio.main.SettingsFragment;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Alexander on 1/8/2018.
@@ -79,4 +83,36 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy HH:mm a");
         return sdf.format(date);
     }
+
+    public static String formatPercentage(String input) {
+        if (input == null) {
+            return "";
+        }
+        float floatPercentage = Float.parseFloat(input);
+        DecimalFormat df2;
+        if (floatPercentage > 0) {
+            df2 = new DecimalFormat("+#,##0.00 '%'");
+        } else {
+            df2 = new DecimalFormat(" #,##0.00 '%'");
+        }
+        return df2.format(floatPercentage);
+    }
+
+    public static String formatCurrency(String input, String preferredCurrency) {
+        if (input == null) {
+            return "";
+        }
+        float floatPrice = Float.parseFloat(input);
+        NumberFormat formatter;
+        //Get proper currency formatter
+        switch (preferredCurrency) {
+            case SettingsFragment.EUR:
+                formatter = DecimalFormat.getCurrencyInstance(Locale.GERMANY);
+                break;
+            default:
+                formatter = DecimalFormat.getCurrencyInstance();
+        }
+        return formatter.format(floatPrice);
+    }
+
 }
