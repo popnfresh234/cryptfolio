@@ -66,11 +66,19 @@ public class CryptfolioDBContract {
         public static final String TABLE_NAME = "transaction_data";
 
         public static final String COLUMN_CURRENCY = "currency";
+        public static final String COLUMN_SYMBOL = "symbol";
         public static final String COLUMN_EXCHANGE_NAME = "exchange_name";
         public static final String COLUMN_TRADING_PAIR = "trading_pair";
         public static final String COLUMN_PURCHASE_PRICE = "purchase_price";
         public static final String COLUMN_PURCHASE_AMOUNT = "purchase_amount";
         public static final String COLUMN_PURCHASE_DATE = "purchase_date";
+    }
+
+    public static final class HoldingEntry implements BaseColumns{
+        public static final String TABLE_NAME = "holding_data";
+        public static final String COLUMN_CURRENCY = "currency";
+        public static final String COLUMN_SYMBOL = "symbol";
+        public static final String COLUMN_AMOUNT = "amount";
     }
 
     public static final class ExchangesEntry implements BaseColumns {
@@ -88,7 +96,7 @@ public class CryptfolioDBContract {
         public static final String COLUMN_XEM = "symbol_XEM";
         public static final String COLUMN_LTC = "symbol_LTC";
         public static final String COLUMN_XLM = "symbol_XLM";
-        public static final String COLUMN_MIOTA = "symbol_IOTA";
+        public static final String COLUMN_MIOTA = "symbol_MIOTA";
         public static final String COLUMN_DASH = "symbol_DASH";
         public static final String COLUMN_NEO = "symbol_NEO";
         public static final String COLUMN_TRX = "symbol_TRX";

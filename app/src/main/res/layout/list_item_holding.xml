@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/constraint_layout_holding_list_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline25"
+        app:layout_constraintGuide_percent="0.25"
+        style="@style/guidlineVertical"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline50"
+        app:layout_constraintGuide_percent="0.5"
+        style="@style/guidlineVertical"/>
+
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline75"
+        app:layout_constraintGuide_percent="0.75"
+        style="@style/guidlineVertical"/>
+
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_currency_label"
+        tools:text="Bitcoin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:padding="@dimen/text_view_small_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline50"/>
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_fiat_change"
+        tools:text="12435"
+        android:textAlignment="viewEnd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_view_small_padding"
+        app:layout_constraintStart_toEndOf="@id/guideline50"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_crypto_amount"
+        tools:text="100BTC"
+        android:textAlignment="viewStart"
+        android:padding="@dimen/text_view_small_padding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline25"/>
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_fiat_amount"
+        tools:text="($100,000)"
+        android:padding="@dimen/text_view_small_padding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
+        app:layout_constraintStart_toEndOf="@id/guideline25"
+        app:layout_constraintEnd_toStartOf="@id/guideline50"/>
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_fiat_price"
+        tools:text="$12345.00"
+        android:layout_width="0dp"
+        android:textAlignment="viewEnd"
+        android:maxLines="1"
+        android:padding="@dimen/text_view_small_padding"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
+        app:layout_constraintStart_toEndOf="@id/guideline50"
+        app:layout_constraintEnd_toStartOf="@id/guideline75"/>
+
+    <TextView
+        android:id="@+id/text_view_holding_list_item_percent_change"
+        tools:text="10%"
+        android:textAlignment="viewEnd"
+        android:padding="@dimen/text_view_small_padding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
+        app:layout_constraintStart_toEndOf="@id/guideline75"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>

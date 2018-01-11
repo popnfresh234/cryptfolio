@@ -2,11 +2,13 @@ package com.dmtaiwan.alexander.cryptfolio.transaction;
 
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +16,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.dmtaiwan.alexander.cryptfolio.R;
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBHelper;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
+import com.dmtaiwan.alexander.cryptfolio.models.Transaction;
 import com.dmtaiwan.alexander.cryptfolio.utilities.Utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -27,7 +32,7 @@ import java.util.Calendar;
  * Created by Alexander on 1/8/2018.
  */
 
-public class EditTransactionActivity extends AppCompatActivity implements View.OnClickListener, android.app.DatePickerDialog.OnDateSetListener{
+public class EditTransactionActivity extends AppCompatActivity implements View.OnClickListener, android.app.DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private Coin coin;
     private TextView textViewCoinName;
@@ -37,6 +42,9 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
     private EditText editTextAmount;
     private TextView textViewDate;
     private TextView buttonAddTransaction;
+    private Calendar selectedTime;
+    private String exchange;
+    private String tradingPair;
 
     //Spinners
     private Spinner exchangeSpinner;
@@ -66,6 +74,7 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
         editTextAmount = findViewById(R.id.edit_transaction_edit_text_amount);
         textViewDate = findViewById(R.id.edit_transaction_text_view_date);
         buttonAddTransaction = findViewById(R.id.edit_transaction_text_view_add_transaction);
+        buttonAddTransaction.setOnClickListener(this);
 
         tradingPairSpinner = findViewById(R.id.edit_transaction_spinner_trading_pair);
 
@@ -78,7 +87,7 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
         exchangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String exchange = (String) exchangeAdapter.getItem(i);
+                exchange = (String) exchangeAdapter.getItem(i);
                 setupTradingPairs(exchange);
             }
 
@@ -89,7 +98,8 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
         });
 
         //Get current time/date and set default value
-        textViewDate.setText(Utils.getFormattedDate(Calendar.getInstance().getTime()));
+        selectedTime = Calendar.getInstance();
+        textViewDate.setText(Utils.getFormattedDate(selectedTime.getTime()));
         textViewDate.setOnClickListener(this);
     }
 
@@ -116,6 +126,10 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
                         currentTime.get(Calendar.MONTH),
                         currentTime.get(Calendar.DAY_OF_MONTH));
                 dpd.show();
+                break;
+            case R.id.edit_transaction_text_view_add_transaction:
+                insertTransaction();
+                break;
         }
     }
 
@@ -124,12 +138,55 @@ public class EditTransactionActivity extends AppCompatActivity implements View.O
         final ArrayAdapter tradingPairAdapter = new ArrayAdapter(this, R.layout.spinner_item, tradingPairs);
         tradingPairAdapter.setDropDownViewResource(R.layout.spinner_drop_down_item);
         tradingPairSpinner.setAdapter(tradingPairAdapter);
+        tradingPairSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tradingPair = (String) tradingPairAdapter.getItem(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
-
+    private void insertTransaction() {
+        String currencyName = coin.getName();
+        String symbol = coin.getSymbol();
+        String exchangeName = exchange;
+        String tradingPairName = tradingPair;
+        String price = editTextPrice.getText().toString().trim();
+        String amount = editTextAmount.getText().toString().trim();
+        long timeInMillis = selectedTime.getTimeInMillis();
+        if (exchangeName.isEmpty() || price.isEmpty() || amount.isEmpty() || tradingPairName.isEmpty()) {
+            Log.i("FAIL", "FAIL");
+        }else{
+            BigDecimal decimalPrice = new BigDecimal(price);
+            BigDecimal decimalAmount = new BigDecimal(amount);
+            Transaction transaction = new Transaction(currencyName, symbol, exchangeName, tradingPairName, decimalPrice, decimalAmount, timeInMillis);
+            CryptfolioDBHelper.insertTransactionIntoDatabase(transaction, this);
+            finish();
+        }
+    }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        selectedTime.set(year, month, dayOfMonth);
+        Calendar currentTime = Calendar.getInstance();
+        TimePickerDialog tpd = new TimePickerDialog(
+                this,
+                this,
+                currentTime.get(Calendar.HOUR_OF_DAY),
+                currentTime.get(Calendar.MINUTE),
+                true);
+        tpd.show();
+    }
 
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        selectedTime.set(Calendar.MINUTE, minute);
+        textViewDate.setText(Utils.getFormattedDate(selectedTime.getTime()));
     }
 }

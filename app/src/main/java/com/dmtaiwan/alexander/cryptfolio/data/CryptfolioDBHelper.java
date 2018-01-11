@@ -9,10 +9,15 @@ import android.util.Log;
 
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.CoinMarketCapEntry;
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.ExchangesEntry;
+import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.TransactionEntry;
+import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract.HoldingEntry;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
+import com.dmtaiwan.alexander.cryptfolio.models.Holding;
+import com.dmtaiwan.alexander.cryptfolio.models.Transaction;
 import com.dmtaiwan.alexander.cryptfolio.models.crypto_compare.Crypto;
 import com.dmtaiwan.alexander.cryptfolio.models.crypto_compare.Exchange;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -191,15 +196,25 @@ public class CryptfolioDBHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TRANSACTION_TABLE = "CREATE TABLE " + CryptfolioDBContract.TransactionEntry.TABLE_NAME + " ("
                 + CryptfolioDBContract.TransactionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CryptfolioDBContract.TransactionEntry.COLUMN_CURRENCY + " TEXT, "
+                + CryptfolioDBContract.TransactionEntry.COLUMN_SYMBOL + " TEXT, "
                 + CryptfolioDBContract.TransactionEntry.COLUMN_EXCHANGE_NAME + " TEXT, "
                 + CryptfolioDBContract.TransactionEntry.COLUMN_TRADING_PAIR + " TEXT, "
                 + CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_PRICE + " TEXT, "
                 + CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_AMOUNT + " TEXT, "
-                + CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_DATE + "TEXT)";
+                + CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_DATE + " TEXT)";
+
+        String SQL_CREATE_HOLDING_TABLE = "CREATE TABLE " + CryptfolioDBContract.HoldingEntry.TABLE_NAME + " ("
+                + CryptfolioDBContract.HoldingEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + CryptfolioDBContract.HoldingEntry.COLUMN_CURRENCY + " TEXT, "
+                + CryptfolioDBContract.HoldingEntry.COLUMN_SYMBOL + " TEXT, "
+                + CryptfolioDBContract.HoldingEntry.COLUMN_AMOUNT + " TEXT, "
+                + "UNIQUE (" + CryptfolioDBContract.HoldingEntry.COLUMN_SYMBOL + ") on conflict replace" + ")";
+
 
         sqLiteDatabase.execSQL(SQL_CREATE_COIN_MARKET_CAP_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_EXCHANGE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TRANSACTION_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_HOLDING_TABLE);
 
     }
 
@@ -402,5 +417,59 @@ public class CryptfolioDBHelper extends SQLiteOpenHelper {
 
         }
         return null;
+    }
+
+    public static void insertTransactionIntoDatabase(Transaction transaction, Context context) {
+        CryptfolioDBHelper dbHelper = new CryptfolioDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        cv.put(TransactionEntry.COLUMN_CURRENCY, transaction.getCurrencyName());
+        cv.put(TransactionEntry.COLUMN_SYMBOL, transaction.getCurrencySymbol());
+        cv.put(TransactionEntry.COLUMN_EXCHANGE_NAME, transaction.getExchangeName());
+        cv.put(TransactionEntry.COLUMN_TRADING_PAIR, transaction.getTradingPair());
+        cv.put(TransactionEntry.COLUMN_PURCHASE_PRICE, transaction.getPurchasePrice().toPlainString());
+        cv.put(TransactionEntry.COLUMN_PURCHASE_AMOUNT, transaction.getPurchaseAmount().toPlainString());
+        cv.put(TransactionEntry.COLUMN_PURCHASE_DATE, transaction.getPurchaseDate());
+        db.insert(TransactionEntry.TABLE_NAME, null, cv);
+
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
+        //Update holdings:
+        Cursor cursor = db.query(HoldingEntry.TABLE_NAME, null, HoldingEntry.COLUMN_SYMBOL + " = ?", new String[]{transaction.getCurrencySymbol()}, null, null, null);
+        ContentValues holding = new ContentValues();
+        if (cursor.getCount() == 0) {
+            //No data for this currency, insert into holding
+            holding.put(HoldingEntry.COLUMN_CURRENCY, transaction.getCurrencyName());
+            holding.put(HoldingEntry.COLUMN_SYMBOL, transaction.getCurrencySymbol());
+            holding.put(HoldingEntry.COLUMN_AMOUNT, transaction.getPurchaseAmount().toPlainString());
+            db.insert(HoldingEntry.TABLE_NAME, null, holding);
+        } else {
+            //Update amount
+            cursor.moveToFirst();
+            String originalAmount = cursor.getString(cursor.getColumnIndex(HoldingEntry.COLUMN_AMOUNT));
+            BigDecimal originalDecimal = new BigDecimal(originalAmount);
+            BigDecimal newAmount = originalDecimal.add(transaction.getPurchaseAmount());
+            holding.put(HoldingEntry.COLUMN_CURRENCY, transaction.getCurrencyName());
+            holding.put(HoldingEntry.COLUMN_SYMBOL, transaction.getCurrencySymbol());
+            holding.put(HoldingEntry.COLUMN_AMOUNT, newAmount.toPlainString());
+            db.insert(HoldingEntry.TABLE_NAME, null, holding);
+        }
+        cursor.close();
+    }
+
+    public static ArrayList<Holding> createHoldingsFromCursor(Cursor cursor) {
+        ArrayList<Holding> holdings = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String currencyName = cursor.getString(cursor.getColumnIndex(HoldingEntry.COLUMN_CURRENCY));
+            String symbol = cursor.getString(cursor.getColumnIndex(HoldingEntry.COLUMN_SYMBOL));
+            BigDecimal amount = new BigDecimal(cursor.getString(cursor.getColumnIndex(HoldingEntry.COLUMN_AMOUNT)));
+            Holding holding = new Holding(currencyName, symbol, amount);
+            holdings.add(holding);
+        }
+        cursor.close();
+        return holdings;
     }
 }
