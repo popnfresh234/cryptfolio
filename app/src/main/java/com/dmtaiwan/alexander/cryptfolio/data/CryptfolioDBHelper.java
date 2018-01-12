@@ -460,6 +460,34 @@ public class CryptfolioDBHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
+    public static ArrayList<Transaction> getTransactionsForSpecificCoin(String symbol, Context context) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        CryptfolioDBHelper helper = new CryptfolioDBHelper(context);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor = db.query(
+                TransactionEntry.TABLE_NAME,
+                null,
+                TransactionEntry.COLUMN_SYMBOL +" = ?",
+                new String[]{symbol},
+                null,
+                null,
+                null
+        );
+        while (cursor.moveToNext()) {
+            Transaction transaction = new Transaction(
+                    cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_CURRENCY)),
+                    cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_SYMBOL)),
+                    cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_EXCHANGE_NAME)),
+                    cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_TRADING_PAIR)),
+                    new BigDecimal(cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_PURCHASE_PRICE))),
+                    new BigDecimal(cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_PURCHASE_AMOUNT))),
+                    Long.valueOf(cursor.getString(cursor.getColumnIndex(TransactionEntry.COLUMN_PURCHASE_DATE)))
+            );
+            transactions.add(transaction);
+        }
+        return transactions;
+    }
+
     public static ArrayList<Holding> createHoldingsFromCursor(Cursor cursor) {
         ArrayList<Holding> holdings = new ArrayList<>();
         while (cursor.moveToNext()) {

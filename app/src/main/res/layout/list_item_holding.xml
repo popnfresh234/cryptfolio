@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline50"/>
 
@@ -41,7 +41,7 @@
         android:textAlignment="viewEnd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         app:layout_constraintStart_toEndOf="@id/guideline50"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -49,7 +49,7 @@
         android:id="@+id/text_view_holding_list_item_crypto_amount"
         tools:text="100BTC"
         android:textAlignment="viewStart"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
@@ -59,7 +59,7 @@
     <TextView
         android:id="@+id/text_view_holding_list_item_fiat_amount"
         tools:text="($100,000)"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -73,7 +73,7 @@
         android:layout_width="0dp"
         android:textAlignment="viewEnd"
         android:maxLines="1"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"
         app:layout_constraintStart_toEndOf="@id/guideline50"
@@ -83,7 +83,7 @@
         android:id="@+id/text_view_holding_list_item_percent_change"
         tools:text="10%"
         android:textAlignment="viewEnd"
-        android:padding="@dimen/text_view_small_padding"
+        android:padding="@dimen/small_padding"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/text_view_holding_list_item_currency_label"

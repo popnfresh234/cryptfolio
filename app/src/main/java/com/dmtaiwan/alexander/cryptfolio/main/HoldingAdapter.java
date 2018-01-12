@@ -1,6 +1,7 @@
 package com.dmtaiwan.alexander.cryptfolio.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBContract;
 import com.dmtaiwan.alexander.cryptfolio.data.CryptfolioDBHelper;
 import com.dmtaiwan.alexander.cryptfolio.models.Coin;
 import com.dmtaiwan.alexander.cryptfolio.models.Holding;
+import com.dmtaiwan.alexander.cryptfolio.transaction.TransactionActivity;
 import com.dmtaiwan.alexander.cryptfolio.utilities.Utils;
 
 import java.math.BigDecimal;
@@ -57,8 +59,7 @@ public class HoldingAdapter extends RecyclerView.Adapter<HoldingAdapter.ViewHold
 
         String symbol = holding.getCurrencySymbol();
         if (coins != null) {
-
-            for (Coin coin : coins) {
+            for (final Coin coin : coins) {
                 if (coin.getSymbol().equals(symbol)) {
                     //Set basic info
                     String formattedPrice = Utils.formatCurrency(coin.getPrice_cad(), preferredCurrency);
@@ -93,6 +94,14 @@ public class HoldingAdapter extends RecyclerView.Adapter<HoldingAdapter.ViewHold
                     transactions.close();
                     String formattedCumulativeProfit = Utils.formatCurrency(cumulativeProfit.toPlainString(), preferredCurrency);
                     holder.fiatChange.setText(formattedCumulativeProfit);
+                    holder.rootView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, TransactionActivity.class);
+                            intent.putExtra(Utils.KEY_COIN, coin);
+                            context.startActivity(intent);
+                        }
+                    });
                 }
             }
 
