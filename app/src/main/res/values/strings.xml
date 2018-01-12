@@ -15,4 +15,9 @@ At imperdiet dui accumsan sit amet nulla. Lectus urna duis convallis convallis t
     <string name="button_add_transaction">Add Transaction</string>
     <string name="text_view_exchange_label">Exchange</string>
     <string name="text_view_trading_pair_label">Trading Pair</string>
+    <string name="list_item_transaction_trading_pair_label">Trading Pair</string>
+    <string name="list_item_transaction_trading_pair_label">Trading Pair</string>
+    <string name="list_item_transaction_worth_label">Worth</string>
+    <string name="list_item_transaction_percent_change_labl">% Change</string>
+    <string name="list_item_transaction_label_amount">Amount Purchased</string>
 </resources>

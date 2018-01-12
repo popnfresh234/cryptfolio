@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline33"
+        style="@style/guidlineVertical"
+        app:layout_constraintGuide_percent="0.33"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline50"
+        style="@style/guidlineVertical"
+        app:layout_constraintGuide_percent="0.50"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline66"
+        style="@style/guidlineVertical"
+        app:layout_constraintGuide_percent="0.66"/>
+
+    <TextView
+        android:id="@+id/list_item_transaction_crypto_buy_price_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_view_label_text_size"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="BTC Buy Price"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_crypto_buy_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_crypto_buy_price_label"
+        tools:text="$10000"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_trading_pair_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/list_item_transaction_trading_pair_label"
+        android:textSize="@dimen/text_view_label_text_size"
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_trading_pair"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_trading_pair_label"
+        tools:text="BTC/USD"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_amount_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/list_item_transaction_label_amount"
+        android:textSize="@dimen/text_view_label_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline66"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline66"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_amount_label"
+        tools:text="10"
+        />
+
+
+    <android.support.v4.widget.Space
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_transaction_spacer_height"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_amount"/>
+
+    <!--Second Row-->
+    <TextView
+        android:id="@+id/list_item_transaction_worth_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/list_item_transaction_worth_label"
+        android:textSize="@dimen/text_view_label_text_size"
+        app:layout_constraintTop_toBottomOf="@id/spacer"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_worth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_worth_label"
+        tools:text="$100,000"
+        />
+
+    <TextView
+        android:id="@+id/list_item_transaction_percent_change_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/list_item_transaction_percent_change_labl"
+        android:textSize="@dimen/text_view_label_text_size"
+        app:layout_constraintTop_toBottomOf="@id/spacer"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/list_item_percent_change"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/list_item_transaction_percent_change_label"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="1080%"
+        />
+
+</android.support.constraint.ConstraintLayout>

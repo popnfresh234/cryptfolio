@@ -7,4 +7,5 @@
     <dimen name="text_view_top_padding">16dp</dimen>
     <dimen name="text_view_label_text_size">12sp</dimen>
     <dimen name="text_view_coin_name_text_size">30sp</dimen>
+    <dimen name="list_item_transaction_spacer_height">8dp</dimen>
 </resources>

@@ -73,7 +73,7 @@ public class OverviewFragment extends android.support.v4.app.Fragment implements
 
         //Test Retrofit Call
         CoinMarketCapApiController coinMarketCapApiController= new CoinMarketCapApiController();
-        coinMarketCapApiController.getCoinList(this, SettingsFragment.CAD);
+        coinMarketCapApiController.getCoinList(this);
 
         CryptoCompareApiController cryptoCompareApiController = new CryptoCompareApiController();
         cryptoCompareApiController.fetchExchangeData(this);

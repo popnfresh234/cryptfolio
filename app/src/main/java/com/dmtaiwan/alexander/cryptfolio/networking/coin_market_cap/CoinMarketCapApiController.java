@@ -25,7 +25,7 @@ public class CoinMarketCapApiController {
 
 
     //Fetches a list of all coins from CoinMarketCap valued in USD, BTC, and the user's preferred currency
-    public void getCoinList(final CoinsCallback coinsCallback, String preferredCurrency) {
+    public void getCoinList(final CoinsCallback coinsCallback) {
         this.coinsCallback = coinsCallback;
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -37,7 +37,7 @@ public class CoinMarketCapApiController {
                 .build();
 
         CoinMarketCapApi coinMarketCapApi = retrofit.create(CoinMarketCapApi.class);
-        Call<ArrayList<Coin>> call = coinMarketCapApi.getCoinList(preferredCurrency);
+        Call<ArrayList<Coin>> call = coinMarketCapApi.getCoinList();
         call.enqueue(new Callback<ArrayList<Coin>>() {
             @Override
             public void onResponse(Call<ArrayList<Coin>> call, Response<ArrayList<Coin>> response) {

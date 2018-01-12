@@ -83,7 +83,7 @@ public class HoldingAdapter extends RecyclerView.Adapter<HoldingAdapter.ViewHold
                         BigDecimal basisCost = new BigDecimal(transactions.getString(transactions.getColumnIndex(CryptfolioDBContract.TransactionEntry.COLUMN_PURCHASE_PRICE)));
                         BigDecimal costBasis = basisAmount.multiply(basisCost);
 
-                        BigDecimal currentPrice = new BigDecimal(coin.getPrice_cad());
+                        BigDecimal currentPrice = new BigDecimal(coin.getPrice_usd());
                         BigDecimal currentValue = basisAmount.multiply(currentPrice);
 
                         BigDecimal profit = currentValue.subtract(costBasis);

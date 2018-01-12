@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 /**
  * Created by Alexander on 1/8/2018.
@@ -14,5 +13,5 @@ import retrofit2.http.Query;
 
 public interface CoinMarketCapApi {
     @GET("ticker/")
-    Call<ArrayList<Coin>> getCoinList(@Query("convert") String currency);
+    Call<ArrayList<Coin>> getCoinList();
 }
