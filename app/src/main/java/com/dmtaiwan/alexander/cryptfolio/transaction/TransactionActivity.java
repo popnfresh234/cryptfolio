@@ -23,6 +23,6 @@ public class TransactionActivity extends AppCompatActivity{
         Coin coin = intent.getParcelableExtra(Utils.KEY_COIN);
         Log.i("TEST", coin.getName());
         TransactionHistoryFragment fragment = TransactionHistoryFragment.newInstance(coin);
-        getSupportFragmentManager().beginTransaction().replace(R.id.transaction_container, fragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.transaction_container, fragment).commit();
     }
 }

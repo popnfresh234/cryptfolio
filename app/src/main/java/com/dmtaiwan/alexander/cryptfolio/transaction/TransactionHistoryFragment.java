@@ -45,7 +45,7 @@ public class TransactionHistoryFragment extends Fragment{
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
 
-        TransactionAdapter adapter = new TransactionAdapter();
+        TransactionAdapter adapter = new TransactionAdapter(coin);
         recyclerView.setAdapter(adapter);
         ArrayList<Transaction> transactions = CryptfolioDBHelper.getTransactionsForSpecificCoin(coin.getSymbol(), getActivity());
         adapter.swapData(transactions);

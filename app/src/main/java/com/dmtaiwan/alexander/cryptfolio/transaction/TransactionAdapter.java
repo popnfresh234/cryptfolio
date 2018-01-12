@@ -13,6 +13,7 @@ import com.dmtaiwan.alexander.cryptfolio.models.Transaction;
 import com.dmtaiwan.alexander.cryptfolio.utilities.Utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +25,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private ArrayList<Transaction> transactions;
     private Coin coin;
     private String preferredCurrency = SettingsFragment.CAD;
+
+    public TransactionAdapter(Coin coin) {
+        this.coin = coin;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,7 +64,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         //set percent change
         BigDecimal purchasePrice = transaction.getPurchasePrice();
         BigDecimal purchaseWorth = purchasePrice.multiply(amount);
-        BigDecimal percentChange = purchaseWorth.divide(currentWorth);
+        BigDecimal percentChange = purchaseWorth.divide(currentWorth, 10, RoundingMode.HALF_UP);
         holder.percentChange.setText(Utils.formatPercentage(percentChange.toPlainString()));
     }
 
@@ -69,7 +74,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             return 0;
         }
         return transactions.size();
-}
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView buyPriceLabel;
@@ -84,6 +89,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         public ViewHolder(View itemView) {
             super(itemView);
+            buyPriceLabel = itemView.findViewById(R.id.list_item_transaction_crypto_buy_price_label);
+            buyPrice = itemView.findViewById(R.id.list_item_transaction_crypto_buy_price);
+            tradingPair = itemView.findViewById(R.id.list_item_transaction_trading_pair);
+            amountPurchased = itemView.findViewById(R.id.list_item_transaction_amount);
+            worth = itemView.findViewById(R.id.list_item_transaction_worth);
+            percentChange = itemView.findViewById(R.id.list_item_transaction_percent_change);
         }
     }
 
